@@ -1,1403 +1,578 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Gowthami Kamatam to the team · Pull Request #1</title>
+<!--
+  =====================================================================
+  GOWTHAMI KAMATAM — "Pull Request" portfolio (single file, no template)
+  Concept: your portfolio is a GitHub PR — "Add Gowthami to the team".
+  Files changed = your sections as diffs. Checks pass as you scroll.
+  Merge button = contact. Everything below is real content from your CV.
+  =====================================================================
+-->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Add Gowthami Kamatam to the team · Pull Request</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --border: #30363d;
-    --text: #e6edf3;
-    --muted: #8b949e;
-    --green: #238636;
-    --green-light: #2ea043;
-    --green-bg: #0d4429; 
-    --green-text: #3fb950;
-    --blue: #1f6feb;
-    --blue-light: #388bfd;
-    --purple: #8957e5;
-    --orange: #d29922;
-    --red: #da3633;
-    --diff-add: #0d4429;
-    --diff-add-text: #3fb950;
-    --diff-num: #21262d;
-    --tag-bg: #21262d;
-    --merged: #8957e5;
-    --merged-bg: #21262d;
-  }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
-
-  /* TOP NAV */
-  .nav {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .nav-logo {
-    color: var(--text);
-    font-size: 20px;
-    font-weight: bold;
-  }
-
-  .nav-path {
-    color: var(--muted);
-    font-size: 13px;
-  }
-
-  .nav-path a { color: var(--blue-light); text-decoration: none; }
-  .nav-path a:hover { text-decoration: underline; }
-
-  /* MAIN LAYOUT */
-  .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 24px;
-  }
-
-  /* PR HEADER */
-  .pr-header { margin-bottom: 16px; }
-
-  .pr-title {
-    font-size: 26px;
-    font-weight: 400;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .pr-title span { color: var(--muted); }
-
-  .pr-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    background: var(--merged);
-    color: #fff;
-    white-space: nowrap;
-    margin-top: 4px;
-  }
-
-  .pr-status.open {
-    background: var(--green);
-  }
-
-  .pr-meta {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 16px;
-  }
-
-  .pr-meta strong { color: var(--blue-light); }
-
-  /* LABELS */
-  .labels {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-
-  .label {
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
-    border: 1px solid transparent;
-  }
-
-  .label-blue { background: #1f3a5f; color: #79c0ff; border-color: #1f6feb; }
-  .label-green { background: #1a3726; color: #3fb950; border-color: #238636; }
-  .label-purple { background: #2e1f5e; color: #c9b4fd; border-color: #8957e5; }
-  .label-orange { background: #3d2a00; color: #e3b341; border-color: #d29922; }
-
-  /* STATS BAR */
-  .stats-bar {
-    display: flex;
-    gap: 24px;
-    padding: 12px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .stat { font-size: 13px; color: var(--muted); }
-  .stat strong { color: var(--text); }
-  .stat .add { color: var(--green-text); }
-  .stat .del { color: #f85149; }
-
-  /* TABS */
-  .tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 24px;
-    gap: 0;
-  }
-
-  .tab {
-    padding: 8px 16px;
-    cursor: pointer;
-    color: var(--muted);
-    font-size: 14px;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: none;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    transition: color 0.15s;
-  }
-
-  .tab:hover { color: var(--text); }
-
-  .tab.active {
-    color: var(--text);
-    border-bottom-color: var(--orange);
-    font-weight: 600;
-  }
-
-  .tab-count {
-    background: var(--tag-bg);
-    padding: 1px 6px;
-    border-radius: 10px;
-    font-size: 12px;
-  }
-
-  /* TAB CONTENT */
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  /* CONVERSATION TAB */
-  .layout-two-col {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 24px;
-  }
-
-  @media (max-width: 768px) {
-    .layout-two-col { grid-template-columns: 1fr; }
-  }
-
-  /* COMMENT BOX */
-  .comment-box {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-
-  .comment-header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-  }
-
-  .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6e40c9, #2ea043);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 13px;
-    color: white;
-    flex-shrink: 0;
-  }
-
-  .avatar-sm {
-    width: 20px;
-    height: 20px;
-    font-size: 10px;
-  }
-
-  .comment-author { font-weight: 600; color: var(--text); }
-  .comment-time { color: var(--muted); margin-left: auto; }
-
-  .comment-body {
-    padding: 16px;
-    line-height: 1.6;
-  }
-
-  .comment-body h3 {
-    font-size: 16px;
-    margin: 16px 0 8px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .comment-body h3:first-child { margin-top: 0; }
-
-  .comment-body p { margin-bottom: 12px; color: var(--muted); }
-  .comment-body p strong { color: var(--text); }
-
-  .comment-body ul {
-    list-style: none;
-    margin-bottom: 12px;
-  }
-
-  .comment-body ul li {
-    padding: 3px 0;
-    color: var(--muted);
-    padding-left: 16px;
-    position: relative;
-  }
-
-  .comment-body ul li::before {
-    content: "▸";
-    position: absolute;
-    left: 0;
-    color: var(--green-text);
-  }
-
-  .comment-body ul li strong { color: var(--text); }
-
-  /* CI CHECKS */
-  .ci-section {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-
-  .ci-header {
-    background: var(--green-bg);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--green-text);
-  }
-
-  .ci-check {
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-  }
-
-  .ci-check:last-child { border-bottom: none; }
-
-  .ci-icon {
-    font-size: 16px;
-    width: 20px;
-    text-align: center;
-  }
-
-  .ci-name { flex: 1; }
-  .ci-detail { color: var(--muted); font-size: 12px; }
-
-  /* MERGE SECTION */
-  .merge-section {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 16px;
-    background: var(--surface);
-  }
-
-  .merge-section.merged {
-    border-color: var(--merged);
-    background: #1a1038;
-  }
-
-  .btn-merge {
-    background: var(--green-light);
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: background 0.2s, transform 0.1s;
-  }
-
-  .btn-merge:hover { background: #2ea043cc; transform: scale(1.02); }
-  .btn-merge:active { transform: scale(0.98); }
-
-  .btn-merge.disabled {
-    background: var(--merged);
-    cursor: default;
-    transform: none;
-  }
-
-  .merge-msg {
-    margin-top: 12px;
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  /* CONTACT REVEAL */
-  .contact-reveal {
-    display: none;
-    margin-top: 16px;
-    padding: 16px;
-    background: var(--green-bg);
-    border: 1px solid var(--green-text);
-    border-radius: 6px;
-    text-align: left;
-  }
-
-  .contact-reveal.show { display: block; }
-
-  .contact-reveal h4 {
-    color: var(--green-text);
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
-
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 0;
-    font-size: 13px;
-    color: var(--text);
-  }
-
-  .contact-item a {
-    color: var(--blue-light);
-    text-decoration: none;
-  }
-
-  .contact-item a:hover { text-decoration: underline; }
-
-  /* SIDEBAR */
-  .sidebar { font-size: 13px; }
-
-  .sidebar-section {
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sidebar-section:last-child {
-    border-bottom: none;
-  }
-
-  .sidebar-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-bottom: 8px;
-  }
-
-  .sidebar-value { color: var(--text); }
-  .sidebar-muted { color: var(--muted); }
-
-  /* REVIEW THREAD */
-  .review-thread {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-
-  .review-header {
-    background: var(--surface);
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .review-comment {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    display: flex;
-    gap: 10px;
-  }
-
-  .review-comment:last-child { border-bottom: none; }
-
-  .review-text { color: var(--muted); line-height: 1.5; }
-  .review-text strong { color: var(--text); }
-
-  /* FILES TAB */
-  .diff-file {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-
-  .diff-file-header {
-    background: var(--surface);
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    font-size: 13px;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .diff-file-header:hover { background: #1c2128; }
-
-  .diff-badge {
-    margin-left: auto;
-    font-family: -apple-system, sans-serif;
-    font-size: 12px;
-    color: var(--green-text);
-  }
-
-  .diff-body {
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    font-size: 12px;
-    overflow-x: auto;
-  }
+  :root{
+    --bg:#0D1117; --surface:#161B22; --surface-2:#0D1117; --inset:#010409;
+    --border:#30363D; --border-2:#21262D;
+    --text:#E6EDF3; --muted:#8B949E; --dim:#6E7681;
+    --green:#3FB950; --green-btn:#238636; --green-hover:#2EA043; --green-bg:rgba(63,185,80,.15);
+    --red:#F85149; --red-bg:rgba(248,81,73,.12);
+    --purple:#A371F7; --purple-btn:#8957E5;
+    --blue:#58A6FF; --yellow:#D29922;
+    --add-line:rgba(46,160,67,.15); --add-gutter:rgba(46,160,67,.30);
+    --sans:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+    --maxw:1000px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  ::selection{background:rgba(88,166,255,.3)}
+  :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+  .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(16px,4vw,24px)}
+  .mono{font-family:var(--mono)}
+
+  /* progress */
+  #prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--green),var(--purple));z-index:200;transition:width .1s linear}
+
+  /* ---------- top app bar ---------- */
+  .appbar{border-bottom:1px solid var(--border);background:var(--surface-2);position:sticky;top:0;z-index:60;backdrop-filter:blur(6px)}
+  .appbar .inner{max-width:var(--maxw);margin-inline:auto;padding:12px clamp(16px,4vw,24px);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .repo{font-size:.95rem;color:var(--muted)}
+  .repo b{color:var(--text);font-weight:600}
+  .repo .sep{color:var(--dim);margin:0 2px}
+  .appbar .spacer{flex:1}
+  .ghost{font-family:var(--mono);font-size:.74rem;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:5px 9px}
+
+  /* ---------- PR header ---------- */
+  .pr-head{padding-top:26px}
+  .pr-title{font-size:clamp(1.5rem,4.5vw,2.1rem);font-weight:400;letter-spacing:-.01em;line-height:1.25}
+  .pr-title .num{color:var(--dim);font-weight:300}
+  .pr-sub{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:.9rem}
+  .state{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.85rem;color:#fff;background:var(--green-btn);padding:6px 13px;border-radius:999px;transition:background .4s ease}
+  .state.merged{background:var(--purple-btn)}
+  .state .ic{width:8px;height:8px;border-radius:50%;background:#fff}
+  .pr-sub code{font-family:var(--mono);font-size:.82rem;color:var(--text);background:var(--surface);border:1px solid var(--border-2);padding:1px 6px;border-radius:5px}
+  .pr-sub .by{color:var(--text);font-weight:600}
+
+  .labels{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+  .label{font-size:.74rem;font-weight:600;padding:3px 11px;border-radius:999px;border:1px solid transparent}
+  .l-ds{color:#79C0FF;background:rgba(56,139,253,.15);border-color:rgba(56,139,253,.3)}
+  .l-ml{color:#D2A8FF;background:rgba(163,113,247,.15);border-color:rgba(163,113,247,.3)}
+  .l-ai{color:#7EE787;background:rgba(63,185,80,.15);border-color:rgba(63,185,80,.3)}
+  .l-bi{color:#FFA657;background:rgba(219,153,34,.15);border-color:rgba(219,153,34,.3)}
+
+  .stats{display:flex;flex-wrap:wrap;gap:18px 26px;margin-top:20px;padding:14px 0;border-top:1px solid var(--border-2);border-bottom:1px solid var(--border-2);font-size:.9rem}
+  .stat b{font-weight:700;font-family:var(--mono)}
+  .stat .add{color:var(--green)} .stat .del{color:var(--red)} .stat .lab{color:var(--muted)}
+
+  /* ---------- tabs ---------- */
+  .tabs{display:flex;gap:4px;margin-top:18px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+  .tab{font-size:.9rem;color:var(--muted);background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:8px}
+  .tab b{font-family:var(--mono);font-size:.72rem;background:var(--surface);border:1px solid var(--border-2);border-radius:999px;padding:1px 7px;color:var(--text)}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--text);border-bottom-color:var(--yellow);font-weight:600}
+
+  .panel{display:none;padding:28px 0 60px}
+  .panel.show{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- comment / card ---------- */
+  .comment{border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;margin-bottom:18px}
+  .c-head{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface-2);border-bottom:1px solid var(--border)}
+  .avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.95rem;color:#fff;background:linear-gradient(135deg,var(--purple),var(--blue));flex:none;overflow:hidden}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .c-head .who b{color:var(--text);font-weight:600}
+  .c-head .who span{color:var(--muted);font-size:.85rem}
+  .c-body{padding:18px 18px}
+  .c-body p{color:var(--text);margin-bottom:12px}
+  .c-body p:last-child{margin-bottom:0}
+  .c-body .meta{color:var(--muted);font-size:.92rem}
+
+  /* ---------- checks panel ---------- */
+  .checks{border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;margin-bottom:18px}
+  .checks .top{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--border)}
+  .checks .top .ring{width:26px;height:26px;border-radius:50%;border:2px solid var(--green);display:grid;place-items:center;flex:none}
+  .checks .top .ring svg{width:14px;height:14px;stroke:var(--green);stroke-width:3;fill:none}
+  .checks .top h3{font-size:1rem;font-weight:600}
+  .checks .top p{font-size:.86rem;color:var(--muted)}
+  .check{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--border-2);font-size:.9rem}
+  .check:last-child{border-bottom:0}
+  .ck-ic{width:16px;height:16px;flex:none;position:relative}
+  .ck-ic .spin{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--yellow);border-radius:50%;animation:spin .7s linear infinite}
+  .ck-ic .done{display:none;width:16px;height:16px;border-radius:50%;background:var(--green);place-items:center}
+  .ck-ic .done svg{width:10px;height:10px;stroke:#0D1117;stroke-width:3.5;fill:none}
+  .check.passed .spin{display:none}
+  .check.passed .done{display:grid}
+  .ck-name{font-family:var(--mono);font-size:.84rem;color:var(--text)}
+  .ck-desc{color:var(--muted);font-size:.84rem}
+  .ck-status{margin-left:auto;font-size:.8rem;color:var(--dim)}
+  .check.passed .ck-status{color:var(--green)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ---------- merge box ---------- */
+  .mergebox{border:1px solid var(--green-btn);border-radius:12px;background:var(--surface);overflow:hidden}
+  .mergebox.merged{border-color:var(--purple-btn)}
+  .mb-top{display:flex;gap:14px;align-items:flex-start;padding:18px}
+  .mb-ring{width:34px;height:34px;border-radius:50%;background:var(--green);display:grid;place-items:center;flex:none}
+  .mergebox.merged .mb-ring{background:var(--purple)}
+  .mb-ring svg{width:18px;height:18px;stroke:#0D1117;stroke-width:3;fill:none}
+  .mb-top h3{font-size:1.05rem;font-weight:600}
+  .mb-top p{color:var(--muted);font-size:.9rem;margin-top:2px}
+  .mb-actions{padding:0 18px 18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .btn-merge{background:var(--green-btn);color:#fff;border:0;border-radius:8px;padding:11px 18px;font-size:.92rem;font-weight:600;font-family:var(--sans);cursor:pointer;transition:background .2s ease,transform .1s ease}
+  .btn-merge:hover{background:var(--green-hover)}
+  .btn-merge:active{transform:translateY(1px)}
+  .contact{display:none;padding:0 18px 20px}
+  .contact.show{display:block}
+  .contact .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+  .cc{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:9px;padding:11px 13px;background:var(--surface-2)}
+  .cc .k{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+  .cc .v{font-size:.9rem;color:var(--text)}
+
+  /* ---------- files / diffs ---------- */
+  .filebar{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.86rem;margin-bottom:14px}
+  .filebar .add{color:var(--green);font-family:var(--mono)} .filebar .del{color:var(--red);font-family:var(--mono)}
+  .file{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;background:var(--surface)}
+  .f-head{display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--surface-2);border-bottom:1px solid var(--border);cursor:pointer}
+  .f-head .chev{transition:transform .2s ease;color:var(--dim)}
+  .file.collapsed .chev{transform:rotate(-90deg)}
+  .f-name{font-family:var(--mono);font-size:.84rem;color:var(--text)}
+  .f-stat{margin-left:auto;font-family:var(--mono);font-size:.78rem}
+  .f-stat .add{color:var(--green)}
+  .diff{font-family:var(--mono);font-size:.8rem;line-height:1.75;overflow-x:auto;background:var(--inset)}
+  .file.collapsed .diff,.file.collapsed .pbody{display:none}
+  .dl{display:flex;white-space:pre}
+  .dl .g{width:42px;flex:none;text-align:right;padding-right:10px;color:var(--add-gutter);user-select:none;background:var(--add-line)}
+  .dl .t{padding:0 14px;color:#aff5b4}
+  .dl.add{background:var(--add-line)}
+  .dl .plus{color:var(--green);padding-left:10px}
+  /* project body */
+  .pbody{padding:16px}
+  .pbody .ov{color:var(--text);font-size:.92rem;margin-bottom:12px}
+  .ptags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .ptag{font-family:var(--mono);font-size:.72rem;color:var(--purple);background:rgba(163,113,247,.12);border:1px solid rgba(163,113,247,.28);border-radius:6px;padding:2px 8px}
+  .pmetrics{display:flex;flex-wrap:wrap;gap:10px 26px}
+  .pm .n{font-size:1.35rem;font-weight:700;font-family:var(--mono)}
+  .pm .n.green{color:var(--green)} .pm .n.blue{color:var(--blue)} .pm .n.purple{color:var(--purple)}
+  .pm .l{font-size:.72rem;color:var(--muted)}
+
+  /* ---------- commits ---------- */
+  .commit{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border-2)}
+  .commit:last-child{border-bottom:0}
+  .commit .dot{width:11px;height:11px;border-radius:50%;background:var(--purple);margin-top:5px;flex:none;box-shadow:0 0 0 4px rgba(163,113,247,.12)}
+  .commit .msg{font-size:.95rem;color:var(--text);font-weight:500}
+  .commit .sub{font-size:.82rem;color:var(--muted);margin-top:2px}
+  .commit .hash{font-family:var(--mono);font-size:.74rem;color:var(--dim);margin-left:auto;border:1px solid var(--border-2);border-radius:6px;padding:2px 7px;flex:none}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  footer{border-top:1px solid var(--border);padding:22px 0;color:var(--dim);font-size:.82rem;font-family:var(--mono);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  @media(max-width:680px){
+    .f-stat{display:none}
+    .commit .hash{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto}
+    .reveal{opacity:1;transform:none}
+  }
+  /* ---------- intro cover ---------- */
+  .cover{position:fixed;inset:0;z-index:999;background:radial-gradient(120% 100% at 50% -10%,#1B2230 0%,#0D1117 58%);display:grid;place-items:center;text-align:center;padding:24px;transition:opacity .6s ease,transform .6s ease}
+  .cover.gone{opacity:0;transform:scale(1.05);pointer-events:none}
+  .cover-inner{max-width:620px;animation:coverIn .85s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes coverIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  .cover .pfp{width:130px;height:130px;border-radius:50%;margin:0 auto 24px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-weight:700;font-size:2.5rem;position:relative;box-shadow:0 0 0 4px #0D1117,0 0 0 6px var(--green),0 14px 40px -10px rgba(163,113,247,.5)}
+  .cover .pfp img{width:100%;height:100%;object-fit:cover}
+  .cover .pfp::after{content:"";position:absolute;right:9px;bottom:9px;width:18px;height:18px;border-radius:50%;background:var(--green);border:3px solid #0D1117;box-shadow:0 0 0 0 rgba(63,185,80,.5);animation:pulseDot 2.4s ease-out infinite}
+  @keyframes pulseDot{0%{box-shadow:0 0 0 0 rgba(63,185,80,.5)}70%,100%{box-shadow:0 0 0 9px rgba(63,185,80,0)}}
+  .cover .eyebrow{font-family:var(--mono);font-size:.8rem;color:var(--green);margin-bottom:14px}
+  .cover h1{font-size:clamp(2rem,7.5vw,3.3rem);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+  .cover .role{font-family:var(--mono);color:var(--blue);margin-top:10px;font-size:.92rem}
+  .cover .tag{color:var(--muted);font-size:1.02rem;line-height:1.65;margin:22px auto 0;max-width:50ch}
+  .cover .tag b{color:var(--text);font-weight:600}
+  .cover .enter{margin-top:30px;background:var(--green-btn);color:#fff;border:0;border-radius:10px;padding:14px 26px;font-size:1rem;font-weight:600;font-family:var(--sans);cursor:pointer;transition:background .2s ease,transform .1s ease}
+  .cover .enter:hover{background:var(--green-hover)}
+  .cover .enter:active{transform:translateY(1px)}
+  .cover .hint{font-family:var(--mono);font-size:.74rem;color:var(--dim);margin-top:18px}
 
-  .diff-body.collapsed { display: none; }
-
-  .diff-line {
-    display: flex;
-    min-width: 0;
-  }
-
-  .diff-line-num {
-    min-width: 40px;
-    padding: 2px 8px;
-    text-align: right;
-    color: var(--muted);
-    background: var(--diff-num);
-    border-right: 1px solid var(--border);
-    user-select: none;
-    font-size: 11px;
-  }
-
-  .diff-line-content {
-    padding: 2px 8px;
-    white-space: pre-wrap;
-    word-break: break-all;
-    flex: 1;
-    color: var(--diff-add-text);
-    background: var(--diff-add);
-  }
-
-  .diff-line-hunk .diff-line-content {
-    color: var(--blue-light);
-    background: #0d2040;
-  }
-
-  .diff-line-hunk .diff-line-num {
-    background: #0d2040;
-  }
-
-  /* COMMITS TAB */
-  .commit-group { margin-bottom: 24px; }
-
-  .commit-date {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 600;
-    padding: 4px 0;
-    margin-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .commit-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-  }
-
-  .commit-item:last-child { border-bottom: none; }
-
-  .commit-msg { flex: 1; color: var(--text); }
-  .commit-msg span { color: var(--muted); font-size: 12px; display: block; }
-
-  .commit-sha {
-    font-family: monospace;
-    font-size: 12px;
-    color: var(--blue-light);
-    background: var(--tag-bg);
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap;
-  }
-
-  /* COUNTER ANIMATION */
-  .counter { display: inline; }
-
-  /* CONFETTI */
-  .confetti-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  .confetti-piece {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    animation: fall 2.5s ease-in forwards;
-  }
-
-  @keyframes fall {
-    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-  }
-
-  /* SPINNER */
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .spinning {
-    display: inline-block;
-    animation: spin 0.8s linear infinite;
-  }
-
-  /* PROGRESS BAR */
-  .progress-bar {
-    width: 100%;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin: 8px 0;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--green-light);
-    border-radius: 2px;
-    width: 0%;
-    transition: width 1s ease;
-  }
-
-  /* MERGED BADGE */
-  .merged-banner {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    background: #21262d;
-    border: 1px solid var(--merged);
-    border-radius: 6px;
-    margin-bottom: 16px;
-    color: #c9b4fd;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .merged-banner.show { display: flex; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-  /* RESPONSIVE */
-  @media (max-width: 600px) {
-    .container { padding: 12px; }
-    .pr-title { font-size: 18px; }
-    .stats-bar { gap: 12px; }
-    .tab { padding: 8px 10px; font-size: 12px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .spinning { animation: none; }
-    .confetti-piece { animation: none; display: none; }
-    .progress-fill { transition: none; }
-    .counter { transition: none; }
-  }
 </style>
-</head>
-<body>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo">⌥</div>
-  <div class="nav-path">
-    <a href="#">gowthami-kamatam</a> /
-    <a href="#">portfolio</a>
+<!-- ============ INTRO COVER ============ -->
+<div class="cover" id="cover">
+  <div class="cover-inner">
+    <div class="pfp"><img src="profile.jpg" alt="Gowthami Kamatam" onerror="this.remove();this.parentElement.insertAdjacentText('afterbegin','GK')"></div>
+    <div class="eyebrow">// you've been added as a reviewer</div>
+    <h1>Hi, I'm Gowthami 👋</h1>
+    <div class="role">Data Scientist · Analytics · AI Engineering</div>
+    <p class="tag">Welcome to my portfolio — which I've shipped as a <b>GitHub pull request</b> titled <b>"Add Gowthami to the team."</b> Fair warning: it contains suspiciously high R² values, exactly <b>zero</b> tech debt, and one merge button with your name on it.</p>
+    <button class="enter" id="enterBtn">Review the pull request →</button>
+    <div class="hint">main ← candidate/gowthami-kamatam · press <b>Enter</b> ↵</div>
   </div>
-</nav>
+</div>
 
-<!-- MAIN -->
-<div class="container">
+<div id="prog"></div>
 
-  <!-- PR HEADER -->
-  <div class="pr-header">
-    <div class="pr-title">
-      Add Gowthami Kamatam to the team
-      <span>#1</span>
+<!-- ============ APP BAR ============ -->
+<div class="appbar">
+  <div class="inner">
+    <span class="repo"><b>your-team</b><span class="sep">/</span><b>data-science</b></span>
+    <span class="ghost">main ← candidate/gowthami-kamatam</span>
+    <span class="spacer"></span>
+    <span class="ghost">⌥ Pull request #2025</span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ============ PR HEADER ============ -->
+  <header class="pr-head reveal">
+    <h1 class="pr-title">Add Gowthami Kamatam to the team <span class="num">#2025</span></h1>
+    <div class="pr-sub">
+      <span class="state" id="state"><span class="ic"></span>Open</span>
+      <span><span class="by">gowthami-kamatam</span> wants to merge <code>5 commits</code> into <code>main</code></span>
     </div>
-
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
-      <div class="pr-status open" id="pr-status-badge">
-        ● Open
-      </div>
-      <div class="pr-meta">
-        <strong>gowthami-kamatam</strong> wants to merge
-        <strong>5 commits</strong> into
-        <strong>your-team:main</strong> from
-        <strong>gowthami-kamatam:feat/hire-me</strong>
-      </div>
-    </div>
-
     <div class="labels">
-      <span class="label label-blue">Data Analyst</span>
-      <span class="label label-green">Data Scientist</span>
-      <span class="label label-purple">BI Analyst</span>
-      <span class="label label-orange">AI/ML Engineer</span>
-      <span class="label label-green">good first hire</span>
-      <span class="label label-blue">sponsorship: OPT → H1B</span>
+      <span class="label l-ds">Data Science</span>
+      <span class="label l-ml">Machine Learning</span>
+      <span class="label l-ai">AI Engineering</span>
+      <span class="label l-bi">Business Intelligence</span>
     </div>
+    <div class="stats">
+      <span class="stat"><b class="count" data-to="5">0</b> <span class="lab">commits</span></span>
+      <span class="stat"><b class="count" data-to="9">0</b> <span class="lab">files changed</span></span>
+      <span class="stat"><b class="add">+<span class="count" data-to="612">0</span></b> <span class="lab">additions</span></span>
+      <span class="stat"><b class="del">−0</b> <span class="lab">deletions <span style="color:var(--dim)">(no tech debt)</span></span></span>
+    </div>
+  </header>
 
-    <div class="stats-bar">
-      <div class="stat">📁 <strong>9 files</strong> changed</div>
-      <div class="stat"><span class="add">+<span class="counter" data-to="612">0</span></span> additions</div>
-      <div class="stat"><span class="del">−0</span> deletions</div>
-      <div class="stat">🔀 <strong>5</strong> commits</div>
-      <div class="stat">✅ All checks passing</div>
-      <div class="stat">📍 Chicago, IL → Anywhere US</div>
-    </div>
+  <!-- ============ TABS ============ -->
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="conv" role="tab">💬 Conversation</button>
+    <button class="tab" data-tab="files" role="tab">📂 Files changed <b>9</b></button>
+    <button class="tab" data-tab="commits" role="tab">⎇ Commits <b>5</b></button>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('conversation')">
-      💬 Conversation <span class="tab-count">7</span>
-    </button>
-    <button class="tab" onclick="switchTab('commits')">
-      ⬡ Commits <span class="tab-count">5</span>
-    </button>
-    <button class="tab" onclick="switchTab('files')">
-      📄 Files changed <span class="tab-count">9</span>
-    </button>
-  </div>
+  <!-- ============ CONVERSATION ============ -->
+  <section class="panel show" id="conv">
 
-  <!-- ===================== CONVERSATION TAB ===================== -->
-  <div class="tab-content active" id="tab-conversation">
-    <div class="layout-two-col">
-
-      <!-- LEFT COLUMN -->
-      <div>
-
-        <!-- PR DESCRIPTION -->
-        <div class="comment-box">
-          <div class="comment-header">
-            <div class="avatar">GK</div>
-            <span class="comment-author">gowthami-kamatam</span>
-            <span style="color:var(--muted); font-size:12px; background:var(--tag-bg); padding:1px 6px; border-radius:10px;">Author</span>
-            <span class="comment-time">just now</span>
-          </div>
-          <div class="comment-body">
-            <h3>📋 Summary</h3>
-            <p>
-              This PR adds <strong>Gowthami Kamatam</strong> — a Master's in Data Science graduate from
-              Illinois Institute of Technology, Chicago — to your team. I bring hands-on experience in
-              machine learning, generative AI, business intelligence, and data engineering, with a track
-              record of turning messy data into decisions that move numbers.
-            </p>
-            <p>
-              I've shipped ML pipelines, built RAG systems, automated reporting workflows that cut manual
-              effort by <strong>~40%</strong>, and delivered customer segmentation models that improved
-              retention by <strong>~15–18%</strong>. I write clean code, communicate clearly with
-              non-technical stakeholders, and I'm ready to contribute from day one.
-            </p>
-
-            <h3>🎯 What this PR includes</h3>
-            <ul>
-              <li><strong>about.md</strong> — who I am and what I care about</li>
-              <li><strong>experience.py</strong> — 3 roles, real metrics, readable Python</li>
-              <li><strong>skills.json</strong> — full stack, no fluff</li>
-              <li><strong>education.md</strong> — MS Data Science, IIT Chicago (GPA 3.45)</li>
-              <li><strong>projects/agentic-ai.py</strong> — LangChain + RAG + PyTorch</li>
-              <li><strong>projects/demand-forecasting.py</strong> — R² > 0.85 supply chain model</li>
-              <li><strong>projects/customer-insights.py</strong> — +18% engagement, +20% targeting</li>
-              <li><strong>projects/document-intelligence.py</strong> — enterprise RAG system</li>
-              <li><strong>projects/reconciliation.py</strong> — financial data automation</li>
-            </ul>
-
-            <h3>✅ Why you should merge</h3>
-            <ul>
-              <li><strong>Zero breaking changes</strong> — I ramp fast and ask good questions</li>
-              <li><strong>No tech debt</strong> — +<span class="counter" data-to="612">0</span> additions, −0 deletions</li>
-              <li><strong>All checks passing</strong> — see CI below</li>
-              <li><strong>Available immediately</strong> — OPT authorization Feb–April 2026</li>
-              <li><strong>Open to relocate</strong> — anywhere in the US</li>
-            </ul>
-
-            <h3>🔗 Related</h3>
-            <ul>
-              <li><strong>Closes:</strong> #hiring-data-scientist, #hiring-bi-analyst, #hiring-ml-engineer</li>
-              <li><strong>Tested on:</strong> Pure Platform (production data), Wipro/Nokia Networks (enterprise scale)</li>
-              <li><strong>Compatible with:</strong> Python 3.x, SQL, Power BI, PyTorch, AWS, Azure</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- CI CHECKS -->
-        <div class="ci-section">
-          <div class="ci-header">
-            ✅ All checks have passed — 6 successful checks
-          </div>
-
-          <div class="ci-check">
-            <div class="ci-icon">✅</div>
-            <div class="ci-name">
-              <strong>verify-education</strong>
-              <div style="color:var(--muted); font-size:12px;">MS Data Science · IIT Chicago · GPA 3.45/4.00</div>
-            </div>
-            <div class="ci-detail">passed in 0.3s</div>
-          </div>
-
-          <div class="ci-check">
-            <div class="ci-icon">✅</div>
-            <div class="ci-name">
-              <strong>experience-tests</strong>
-              <div style="color:var(--muted); font-size:12px;">3 roles · 1.5 years · Pure Platform + Wipro + Nokia</div>
-            </div>
-            <div class="ci-detail">passed in 1.2s</div>
-          </div>
-
-          <div class="ci-check">
-            <div class="ci-icon">✅</div>
-            <div class="ci-name">
-              <strong>ml-ai-pipeline</strong>
-              <div style="color:var(--muted); font-size:12px;">Python · PyTorch · scikit-learn · LangChain · RAG · FAISS</div>
-            </div>
-            <div class="ci-detail">passed in 2.1s</div>
-          </div>
-
-          <div class="ci-check">
-            <div class="ci-icon">✅</div>
-            <div class="ci-name">
-              <strong>bi-reporting-suite</strong>
-              <div style="color:var(--muted); font-size:12px;">Power BI · Tableau · Advanced Excel · SQL · ETL</div>
-            </div>
-            <div class="ci-detail">passed in 0.9s</div>
-          </div>
-
-          <div class="ci-check">
-            <div class="ci-icon">✅</div>
-            <div class="ci-name">
-              <strong>impact-metrics</strong>
-              <div style="color:var(--muted); font-size:12px;">+20% targeting · +18% retention · −40% manual effort · R²>0.85</div>
-            </div>
-            <div class="ci-detail">passed in 0.7s</div>
-          </div>
-
-          <div class="ci-check">
-            <div class="ci-icon">✅</div>
-            <div class="ci-name">
-              <strong>communication-check</strong>
-              <div style="color:var(--muted); font-size:12px;">Stakeholder communication · Documentation · Cross-functional collaboration</div>
-            </div>
-            <div class="ci-detail">passed in 0.4s</div>
-          </div>
-        </div>
-
-        <!-- REVIEW THREAD -->
-        <div class="review-thread">
-          <div class="review-header">
-            💬 Review comments
-          </div>
-
-          <div class="review-comment">
-            <div class="avatar avatar-sm" style="background: linear-gradient(135deg, #1f6feb, #8957e5);">R</div>
-            <div>
-              <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">
-                <strong style="color:var(--text);">recruiter-bot</strong> · reviewed just now
-              </div>
-              <div class="review-text">
-                Looks good — strong metrics on the customer segmentation work.
-                Can you say more about the <strong>RAG pipeline architecture</strong>?
-                Specifically the chunking strategy and retrieval accuracy numbers.
-              </div>
-            </div>
-          </div>
-
-          <div class="review-comment">
-            <div class="avatar avatar-sm">GK</div>
-            <div>
-              <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">
-                <strong style="color:var(--text);">gowthami-kamatam</strong> · replied just now
-              </div>
-              <div class="review-text">
-                Great question! Used <strong>recursive character text splitter</strong> with 512-token
-                chunks and 50-token overlap. Retrieval accuracy measured via MRR@5 on a held-out
-                eval set — hit <strong>0.87</strong> after tuning the embedding model from
-                text-embedding-ada-002 to text-embedding-3-small. Happy to walk through the
-                full eval pipeline in more detail. 🚀
-              </div>
-            </div>
-          </div>
-
-          <div class="review-comment">
-            <div class="avatar avatar-sm" style="background: linear-gradient(135deg, #d29922, #f85149);">H</div>
-            <div>
-              <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">
-                <strong style="color:var(--text);">hiring-manager</strong> · reviewed just now
-              </div>
-              <div class="review-text">
-                The supply chain forecasting project is directly relevant to what we're building.
-                R²&nbsp;>&nbsp;0.85 on ARIMA + Random Forest ensemble is solid.
-                <strong>Approving this PR.</strong> Let's schedule a sync. ✅
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- MERGE SECTION -->
-        <div class="merge-section" id="merge-section">
-          <div id="pre-merge">
-            <div style="font-size:13px; color:var(--muted); margin-bottom:12px;">
-              ✅ This branch has no conflicts with the base branch
-            </div>
-            <button class="btn-merge" id="merge-btn" onclick="doMerge()">
-              🔀 Merge pull request
-            </button>
-            <div class="merge-msg">
-              Merging <strong>5 commits</strong> into your-team:main
-            </div>
-          </div>
-
-          <div id="post-merge" style="display:none;">
-            <div class="merged-banner show">
-              🟣 Pull request successfully merged and closed
-            </div>
-            <div style="font-size:13px; color:var(--muted); margin-bottom:12px;">
-              You can now delete the branch <code style="background:var(--tag-bg); padding:1px 4px; border-radius:3px;">feat/hire-me</code>
-              or keep exploring this PR.
-            </div>
-
-            <div class="contact-reveal show">
-              <h4>🎉 Gowthami is now on your team! Here's how to reach her:</h4>
-              <div class="contact-item">
-                📧 <a href="mailto:kamatamgowthami23@gmail.com">kamatamgowthami23@gmail.com</a>
-              </div>
-              <div class="contact-item">
-                💼 <a href="https://www.linkedin.com/in/gowthami-kamatam/" target="_blank">linkedin.com/in/gowthami-kamatam</a>
-              </div>
-              <div class="contact-item">
-                📞 <a href="tel:+13127924389">+1 (312) 792-4389</a>
-              </div>
-              <div class="contact-item">
-                📍 Chicago, IL · Open to relocate anywhere in the US
-              </div>
-              <div class="contact-item">
-                ⏰ Available: OPT authorization Feb–April 2026
-              </div>
-            </div>
-          </div>
-        </div>
-
+    <div class="comment reveal">
+      <div class="c-head">
+        <div class="avatar"><img src="profile.jpg" alt="Gowthami Kamatam" onerror="this.remove();this.parentElement.textContent='GK'"></div>
+        <div class="who"><b>gowthami-kamatam</b> <span>opened this pull request · Chicago, IL</span></div>
       </div>
-
-      <!-- SIDEBAR -->
-      <div class="sidebar">
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">Reviewers</div>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#1f6feb,#8957e5);">R</div>
-              <span class="sidebar-muted">Awaiting review</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">Labels</div>
-          <div class="labels" style="flex-direction:column; align-items:flex-start;">
-            <span class="label label-green">good first hire</span>
-            <span class="label label-blue">Data Science</span>
-            <span class="label label-purple">AI/ML</span>
-            <span class="label label-orange">BI / Analytics</span>
-          </div>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">Milestone</div>
-          <div class="sidebar-value">🎓 MS Graduation Dec 2025</div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="milestone-bar" style="width:100%;"></div>
-          </div>
-          <div class="sidebar-muted" style="font-size:12px;">Completed — ready to hire</div>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">Work Authorization</div>
-          <div class="sidebar-value">F-1 OPT (STEM)</div>
-          <div class="sidebar-muted">Available Feb–April 2026</div>
-          <div class="sidebar-muted" style="margin-top:4px;">3-year STEM extension eligible</div>
-          <div class="sidebar-muted">H1B sponsorship welcome</div>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">Location</div>
-          <div class="sidebar-value">📍 Chicago, IL</div>
-          <div class="sidebar-muted">Open to relocate anywhere in the US</div>
-          <div class="sidebar-muted" style="margin-top:4px;">Remote / Hybrid / On-site ✓</div>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">Quick Stats</div>
-          <div style="display:flex; flex-direction:column; gap:4px; font-size:12px;">
-            <div>📊 <span class="counter" data-to="8000">0</span>+ records analyzed</div>
-            <div>📉 −<span class="counter" data-to="40">0</span>% manual effort</div>
-            <div>📈 +<span class="counter" data-to="20">0</span>% targeting accuracy</div>
-            <div>💡 +<span class="counter" data-to="18">0</span>% customer retention</div>
-            <div>🎯 R² > 0.85 forecasting</div>
-            <div>🔁 <span class="counter" data-to="5">0</span> projects shipped</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== COMMITS TAB ===================== -->
-  <div class="tab-content" id="tab-commits">
-
-    <div class="commit-group">
-      <div class="commit-date">2025</div>
-
-      <div class="commit-item">
-        <div class="avatar avatar-sm">GK</div>
-        <div class="commit-msg">
-          feat: add agentic AI + RAG pipeline for supply chain intelligence
-          <span>gowthami-kamatam · Dec 2025 · MS Data Science completed, IIT Chicago</span>
-        </div>
-        <div class="commit-sha">a1b2c3d</div>
-      </div>
-
-      <div class="commit-item">
-        <div class="avatar avatar-sm">GK</div>
-        <div class="commit-msg">
-          feat: build demand forecasting model · R² > 0.85 · supply chain + inventory
-          <span>gowthami-kamatam · Nov 2025</span>
-        </div>
-        <div class="commit-sha">e4f5g6h</div>
-      </div>
-
-      <div class="commit-item">
-        <div class="avatar avatar-sm">GK</div>
-        <div class="commit-msg">
-          feat(pure-platform): customer segmentation · +20% targeting · −40% manual effort
-          <span>gowthami-kamatam · May 2025 · Data Science Practicum shipped</span>
-        </div>
-        <div class="commit-sha">i7j8k9l</div>
+      <div class="c-body">
+        <p>Data Scientist &amp; Analytics professional with a Master's in Data Science from <b>Illinois Institute of Technology</b>, Chicago. I build end-to-end machine-learning solutions, data pipelines, BI dashboards, and generative-AI applications.</p>
+        <p>I care about turning complex data into actionable insights that drive real business impact — the kind that shows up in retention numbers, forecast accuracy, and hours of manual work removed.</p>
+        <p class="meta">📌 Open to <b>Data Science, Business Intelligence, Analytics, and AI Engineering</b> roles across the United States.</p>
       </div>
     </div>
 
-    <div class="commit-group">
-      <div class="commit-date">2022 — 2023</div>
-
-      <div class="commit-item">
-        <div class="avatar avatar-sm">GK</div>
-        <div class="commit-msg">
-          feat(wipro): enterprise ML + automation · Nokia Networks · telecom at scale
-          <span>gowthami-kamatam · Jan 2023 · Project Engineer role completed</span>
-        </div>
-        <div class="commit-sha">m1n2o3p</div>
+    <!-- CI CHECKS (animate on scroll) -->
+    <div class="checks reveal" id="checks">
+      <div class="top">
+        <div class="ring"><svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg></div>
+        <div><h3>All checks have passed</h3><p><span id="ckcount">0</span>/6 successful checks</p></div>
       </div>
-
-      <div class="commit-item">
-        <div class="avatar avatar-sm">GK</div>
-        <div class="commit-msg">
-          init: B.Tech Computer Science · JNTU India · GPA 3.68/4.00
-          <span>gowthami-kamatam · June 2022 · the origin commit</span>
-        </div>
-        <div class="commit-sha">q4r5s6t</div>
-      </div>
-
+      <div class="check" data-i="0"><span class="ck-ic"><span class="spin"></span><span class="done"><svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg></span></span><span class="ck-name">verify-education</span><span class="ck-desc">— M.S. Data Science, IIT Chicago</span><span class="ck-status">queued</span></div>
+      <div class="check" data-i="1"><span class="ck-ic"><span class="spin"></span><span class="done"><svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg></span></span><span class="ck-name">experience-tests</span><span class="ck-desc">— 3 roles · ~3 yrs · pass</span><span class="ck-status">queued</span></div>
+      <div class="check" data-i="2"><span class="ck-ic"><span class="spin"></span><span class="done"><svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg></span></span><span class="ck-name">ml-ai-pipeline</span><span class="ck-desc">— Agentic AI · RAG · forecasting</span><span class="ck-status">queued</span></div>
+      <div class="check" data-i="3"><span class="ck-ic"><span class="spin"></span><span class="done"><svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg></span></span><span class="ck-name">bi-dashboards</span><span class="ck-desc">— Power BI · Tableau · KPIs</span><span class="ck-status">queued</span></div>
+      <div class="check" data-i="4"><span class="ck-ic"><span class="spin"></span><span class="done"><svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg></span></span><span class="ck-name">cloud-mlops</span><span class="ck-desc">— AWS · Azure · Docker · CI/CD</span><span class="ck-status">queued</span></div>
+      <div class="check" data-i="5"><span class="ck-ic"><span class="spin"></span><span class="done"><svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg></span></span><span class="ck-name">availability</span><span class="ck-desc">— open to relocate, ready to start</span><span class="ck-status">queued</span></div>
     </div>
-  </div>
 
-  <!-- ===================== FILES TAB ===================== -->
-  <div class="tab-content" id="tab-files">
+    <!-- MERGE BOX -->
+    <div class="mergebox reveal" id="mergebox">
+      <div class="mb-top">
+        <div class="mb-ring"><svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg></div>
+        <div>
+          <h3 id="mb-title">This pull request can be merged</h3>
+          <p id="mb-sub">All checks passed. Bringing Gowthami onboard has no conflicts.</p>
+        </div>
+      </div>
+      <div class="mb-actions">
+        <button class="btn-merge" id="mergeBtn">Merge pull request</button>
+        <span class="mono" style="color:var(--muted);font-size:.82rem">— or reach out directly below</span>
+      </div>
+      <div class="contact" id="contact">
+        <div class="grid">
+          <a class="cc" href="mailto:kamatamgowthami23@gmail.com"><div><div class="k">email</div><div class="v">kamatamgowthami23@gmail.com</div></div></a>
+          <a class="cc" href="https://linkedin.com/in/gowthami-kamatam"><div><div class="k">linkedin</div><div class="v">in/gowthami-kamatam</div></div></a>
+          <a class="cc" href="tel:+13127924389"><div><div class="k">phone</div><div class="v">+1 (312) 792-4389</div></div></a>
+          <div class="cc"><div><div class="k">location</div><div class="v">Chicago, IL · open to relocate</div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============ FILES CHANGED ============ -->
+  <section class="panel" id="files">
+    <div class="filebar">Showing <b style="color:var(--text)">9 changed files</b> with <span class="add">+612</span> additions and <span class="del">−0</span> deletions</div>
 
     <!-- about.md -->
-    <div class="diff-file">
-      <div class="diff-file-header" onclick="toggleDiff(this)">
-        ▾ &nbsp; <span style="color:var(--green-text);">about.md</span>
-        <span class="diff-badge">+28 −0</span>
-      </div>
-      <div class="diff-body">
-        <div class="diff-line diff-line-hunk">
-          <div class="diff-line-num">@@</div>
-          <div class="diff-line-content">@@ -0,0 +1,28 @@ # About Gowthami Kamatam</div>
-        </div>
-        <div class="diff-line"><div class="diff-line-num">1</div><div class="diff-line-content">+ # About Gowthami Kamatam</div></div>
-        <div class="diff-line"><div class="diff-line-num">2</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">3</div><div class="diff-line-content">+ MS Data Science · Illinois Institute of Technology, Chicago · GPA 3.45/4.00</div></div>
-        <div class="diff-line"><div class="diff-line-num">4</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">5</div><div class="diff-line-content">+ I build things that turn data into decisions. Machine learning pipelines,</div></div>
-        <div class="diff-line"><div class="diff-line-num">6</div><div class="diff-line-content">+ generative AI applications, BI dashboards, and ETL systems — end to end,</div></div>
-        <div class="diff-line"><div class="diff-line-num">7</div><div class="diff-line-content">+ production-ready, with real numbers behind them.</div></div>
-        <div class="diff-line"><div class="diff-line-num">8</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">9</div><div class="diff-line-content">+ Based in Chicago · Open to relocate anywhere in the US</div></div>
-        <div class="diff-line"><div class="diff-line-num">10</div><div class="diff-line-content">+ OPT authorization: Feb–April 2026 · H1B sponsorship welcome</div></div>
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">about.md</span><span class="f-stat"><span class="add">+8</span></span></div>
+      <div class="diff">
+        <div class="dl add"><span class="g">1</span><span class="plus">+</span><span class="t"># Gowthami Kamatam</span></div>
+        <div class="dl add"><span class="g">2</span><span class="plus">+</span><span class="t">Data Scientist · Analytics · AI Engineering — Chicago, IL</span></div>
+        <div class="dl add"><span class="g">3</span><span class="plus">+</span><span class="t"></span></div>
+        <div class="dl add"><span class="g">4</span><span class="plus">+</span><span class="t">M.S. Data Science, Illinois Institute of Technology.</span></div>
+        <div class="dl add"><span class="g">5</span><span class="plus">+</span><span class="t">I build end-to-end ML systems, data pipelines, BI dashboards,</span></div>
+        <div class="dl add"><span class="g">6</span><span class="plus">+</span><span class="t">and generative-AI apps that turn data into decisions.</span></div>
+        <div class="dl add"><span class="g">7</span><span class="plus">+</span><span class="t"></span></div>
+        <div class="dl add"><span class="g">8</span><span class="plus">+</span><span class="t">Open to DS / BI / Analytics / AI Engineering roles, US-wide.</span></div>
       </div>
     </div>
 
     <!-- experience.py -->
-    <div class="diff-file">
-      <div class="diff-file-header" onclick="toggleDiff(this)">
-        ▾ &nbsp; <span style="color:var(--green-text);">experience.py</span>
-        <span class="diff-badge">+62 −0</span>
-      </div>
-      <div class="diff-body">
-        <div class="diff-line diff-line-hunk">
-          <div class="diff-line-num">@@</div>
-          <div class="diff-line-content">@@ -0,0 +1,62 @@ experience = [...]</div>
-        </div>
-        <div class="diff-line"><div class="diff-line-num">1</div><div class="diff-line-content">+ experience = [</div></div>
-        <div class="diff-line"><div class="diff-line-num">2</div><div class="diff-line-content">+   {</div></div>
-        <div class="diff-line"><div class="diff-line-num">3</div><div class="diff-line-content">+     "role": "Data Science Practicum",</div></div>
-        <div class="diff-line"><div class="diff-line-num">4</div><div class="diff-line-content">+     "company": "Pure Platform",</div></div>
-        <div class="diff-line"><div class="diff-line-num">5</div><div class="diff-line-content">+     "period": "Jan 2025 – May 2025",</div></div>
-        <div class="diff-line"><div class="diff-line-num">6</div><div class="diff-line-content">+     "location": "Chicago, IL",</div></div>
-        <div class="diff-line"><div class="diff-line-num">7</div><div class="diff-line-content">+     "impact": {</div></div>
-        <div class="diff-line"><div class="diff-line-num">8</div><div class="diff-line-content">+       "records_analyzed": 8000,         # customer transactions</div></div>
-        <div class="diff-line"><div class="diff-line-num">9</div><div class="diff-line-content">+       "targeting_improvement": "20%",    # campaign effectiveness</div></div>
-        <div class="diff-line"><div class="diff-line-num">10</div><div class="diff-line-content">+       "retention_improvement": "15-18%", # K-Means segmentation</div></div>
-        <div class="diff-line"><div class="diff-line-num">11</div><div class="diff-line-content">+       "manual_effort_reduction": "40%",  # Python automation</div></div>
-        <div class="diff-line"><div class="diff-line-num">12</div><div class="diff-line-content">+     },</div></div>
-        <div class="diff-line"><div class="diff-line-num">13</div><div class="diff-line-content">+     "stack": ["Python", "SQL", "Power BI", "scikit-learn", "Pandas"],</div></div>
-        <div class="diff-line"><div class="diff-line-num">14</div><div class="diff-line-content">+   },</div></div>
-        <div class="diff-line"><div class="diff-line-num">15</div><div class="diff-line-content">+   {</div></div>
-        <div class="diff-line"><div class="diff-line-num">16</div><div class="diff-line-content">+     "role": "Project Engineer — Data Analysis & Systems",</div></div>
-        <div class="diff-line"><div class="diff-line-num">17</div><div class="diff-line-content">+     "company": "Wipro Limited (Client: Nokia Networks)",</div></div>
-        <div class="diff-line"><div class="diff-line-num">18</div><div class="diff-line-content">+     "period": "May 2022 – Jan 2023",</div></div>
-        <div class="diff-line"><div class="diff-line-num">19</div><div class="diff-line-content">+     "location": "Bengaluru, India",</div></div>
-        <div class="diff-line"><div class="diff-line-num">20</div><div class="diff-line-content">+     "scale": "enterprise",               # Nokia Networks telecom</div></div>
-        <div class="diff-line"><div class="diff-line-num">21</div><div class="diff-line-content">+     "stack": ["Python", "SQL", "JIRA", "Linux", "Agile"],</div></div>
-        <div class="diff-line"><div class="diff-line-num">22</div><div class="diff-line-content">+   },</div></div>
-        <div class="diff-line"><div class="diff-line-num">23</div><div class="diff-line-content">+   {</div></div>
-        <div class="diff-line"><div class="diff-line-num">24</div><div class="diff-line-content">+     "role": "Project Engineer Intern",</div></div>
-        <div class="diff-line"><div class="diff-line-num">25</div><div class="diff-line-content">+     "company": "Wipro Limited",</div></div>
-        <div class="diff-line"><div class="diff-line-num">26</div><div class="diff-line-content">+     "period": "Jan 2022 – May 2022",</div></div>
-        <div class="diff-line"><div class="diff-line-num">27</div><div class="diff-line-content">+     "focus": "5G telecom · performance analytics · Agile",</div></div>
-        <div class="diff-line"><div class="diff-line-num">28</div><div class="diff-line-content">+   },</div></div>
-        <div class="diff-line"><div class="diff-line-num">29</div><div class="diff-line-content">+ ]</div></div>
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">experience.py</span><span class="f-stat"><span class="add">+22</span></span></div>
+      <div class="diff">
+        <div class="dl add"><span class="g">1</span><span class="plus">+</span><span class="t"># 3 roles · ~3 years · Python / SQL / ML</span></div>
+        <div class="dl add"><span class="g">2</span><span class="plus">+</span><span class="t"></span></div>
+        <div class="dl add"><span class="g">3</span><span class="plus">+</span><span class="t">def pure_platform():  # Data Science Practicum · IIT × Pure Platform</span></div>
+        <div class="dl add"><span class="g">4</span><span class="plus">+</span><span class="t">    # Jan–May 2025 · Chicago, IL</span></div>
+        <div class="dl add"><span class="g">5</span><span class="plus">+</span><span class="t">    analyze(records=8_000, methods=["clustering","prediction"])  # +20% targeting</span></div>
+        <div class="dl add"><span class="g">6</span><span class="plus">+</span><span class="t">    build_etl_pipelines(raw -> analysis_ready)</span></div>
+        <div class="dl add"><span class="g">7</span><span class="plus">+</span><span class="t">    publish(PowerBI, kpis=["CLV","frequency","retention"])</span></div>
+        <div class="dl add"><span class="g">8</span><span class="plus">+</span><span class="t">    automate(reporting, pandas, numpy)        # −40% manual effort</span></div>
+        <div class="dl add"><span class="g">9</span><span class="plus">+</span><span class="t">    segment(method="RFM + KMeans")            # +15–18% engagement</span></div>
+        <div class="dl add"><span class="g">10</span><span class="plus">+</span><span class="t"></span></div>
+        <div class="dl add"><span class="g">11</span><span class="plus">+</span><span class="t">def wipro_nokia():    # Project Engineer · Wipro (Nokia Networks)</span></div>
+        <div class="dl add"><span class="g">12</span><span class="plus">+</span><span class="t">    # 2022–2023 · Bengaluru, India</span></div>
+        <div class="dl add"><span class="g">13</span><span class="plus">+</span><span class="t">    analyze("large operational datasets")     # ↑ system reliability</span></div>
+        <div class="dl add"><span class="g">14</span><span class="plus">+</span><span class="t">    audit(root_cause=True)                    # ↓ recurring defects</span></div>
+        <div class="dl add"><span class="g">15</span><span class="plus">+</span><span class="t">    automate(python, performance_monitoring)</span></div>
+        <div class="dl add"><span class="g">16</span><span class="plus">+</span><span class="t">    collaborate(cross_functional_teams, jira)</span></div>
+        <div class="dl add"><span class="g">17</span><span class="plus">+</span><span class="t"></span></div>
+        <div class="dl add"><span class="g">18</span><span class="plus">+</span><span class="t">def wipro_intern():   # Project Engineer Intern · Wipro</span></div>
+        <div class="dl add"><span class="g">19</span><span class="plus">+</span><span class="t">    # Jan–May 2022 · Bengaluru, India</span></div>
+        <div class="dl add"><span class="g">20</span><span class="plus">+</span><span class="t">    analyze("5G telecom performance metrics")</span></div>
+        <div class="dl add"><span class="g">21</span><span class="plus">+</span><span class="t">    support(troubleshooting, documentation, testing)</span></div>
+        <div class="dl add"><span class="g">22</span><span class="plus">+</span><span class="t">    work(style="Agile/Scrum")</span></div>
       </div>
     </div>
 
     <!-- skills.json -->
-    <div class="diff-file">
-      <div class="diff-file-header" onclick="toggleDiff(this)">
-        ▾ &nbsp; <span style="color:var(--green-text);">skills.json</span>
-        <span class="diff-badge">+48 −0</span>
-      </div>
-      <div class="diff-body">
-        <div class="diff-line diff-line-hunk">
-          <div class="diff-line-num">@@</div>
-          <div class="diff-line-content">@@ -0,0 +1,48 @@ { "skills": {...} }</div>
-        </div>
-        <div class="diff-line"><div class="diff-line-num">1</div><div class="diff-line-content">+ {</div></div>
-        <div class="diff-line"><div class="diff-line-num">2</div><div class="diff-line-content">+   "languages": ["Python", "SQL", "JavaScript", "Bash"],</div></div>
-        <div class="diff-line"><div class="diff-line-num">3</div><div class="diff-line-content">+   "ml_ai": [</div></div>
-        <div class="diff-line"><div class="diff-line-num">4</div><div class="diff-line-content">+     "Machine Learning", "Deep Learning", "NLP", "Generative AI",</div></div>
-        <div class="diff-line"><div class="diff-line-num">5</div><div class="diff-line-content">+     "LangChain", "RAG", "LLMs", "Agentic AI", "RLHF", "SFT",</div></div>
-        <div class="diff-line"><div class="diff-line-num">6</div><div class="diff-line-content">+     "Vector Databases (FAISS, Chroma)", "OpenAI APIs",</div></div>
-        <div class="diff-line"><div class="diff-line-num">7</div><div class="diff-line-content">+     "PyTorch", "TensorFlow", "scikit-learn", "Keras"</div></div>
-        <div class="diff-line"><div class="diff-line-num">8</div><div class="diff-line-content">+   ],</div></div>
-        <div class="diff-line"><div class="diff-line-num">9</div><div class="diff-line-content">+   "data_engineering": [</div></div>
-        <div class="diff-line"><div class="diff-line-num">10</div><div class="diff-line-content">+     "ETL Pipelines", "Data Modeling", "Data Warehousing",</div></div>
-        <div class="diff-line"><div class="diff-line-num">11</div><div class="diff-line-content">+     "PostgreSQL", "MySQL", "Snowflake", "Feature Engineering"</div></div>
-        <div class="diff-line"><div class="diff-line-num">12</div><div class="diff-line-content">+   ],</div></div>
-        <div class="diff-line"><div class="diff-line-num">13</div><div class="diff-line-content">+   "bi_visualization": [</div></div>
-        <div class="diff-line"><div class="diff-line-num">14</div><div class="diff-line-content">+     "Power BI", "Tableau", "Advanced Excel", "Dashboard Development",</div></div>
-        <div class="diff-line"><div class="diff-line-num">15</div><div class="diff-line-content">+     "KPI Reporting", "Exception Reporting", "Matplotlib", "Plotly"</div></div>
-        <div class="diff-line"><div class="diff-line-num">16</div><div class="diff-line-content">+   ],</div></div>
-        <div class="diff-line"><div class="diff-line-num">17</div><div class="diff-line-content">+   "cloud_mlops": [</div></div>
-        <div class="diff-line"><div class="diff-line-num">18</div><div class="diff-line-content">+     "AWS", "Azure", "Docker", "CI/CD", "Git",</div></div>
-        <div class="diff-line"><div class="diff-line-num">19</div><div class="diff-line-content">+     "Model Deployment", "Model Versioning", "Performance Monitoring"</div></div>
-        <div class="diff-line"><div class="diff-line-num">20</div><div class="diff-line-content">+   ]</div></div>
-        <div class="diff-line"><div class="diff-line-num">21</div><div class="diff-line-content">+ }</div></div>
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">skills.json</span><span class="f-stat"><span class="add">+10</span></span></div>
+      <div class="diff">
+        <div class="dl add"><span class="g">1</span><span class="plus">+</span><span class="t">{</span></div>
+        <div class="dl add"><span class="g">2</span><span class="plus">+</span><span class="t">  "languages":   ["Python", "SQL", "JavaScript", "Bash"],</span></div>
+        <div class="dl add"><span class="g">3</span><span class="plus">+</span><span class="t">  "ml_ai":       ["Deep Learning", "NLP", "LLMs", "LangChain",</span></div>
+        <div class="dl add"><span class="g">4</span><span class="plus">+</span><span class="t">                  "RAG", "Agentic AI", "RLHF", "Prompt Engineering"],</span></div>
+        <div class="dl add"><span class="g">5</span><span class="plus">+</span><span class="t">  "frameworks":  ["PyTorch", "TensorFlow", "scikit-learn", "Pandas", "FastAPI"],</span></div>
+        <div class="dl add"><span class="g">6</span><span class="plus">+</span><span class="t">  "data_eng":    ["ETL", "Data Modeling", "Warehousing", "Snowflake", "PostgreSQL"],</span></div>
+        <div class="dl add"><span class="g">7</span><span class="plus">+</span><span class="t">  "vector_dbs":  ["FAISS", "Chroma", "OpenAI Embeddings"],</span></div>
+        <div class="dl add"><span class="g">8</span><span class="plus">+</span><span class="t">  "bi_viz":      ["Power BI", "Tableau", "Advanced Excel"],</span></div>
+        <div class="dl add"><span class="g">9</span><span class="plus">+</span><span class="t">  "mlops_cloud": ["AWS", "Azure", "Docker", "CI/CD", "Git", "Linux"]</span></div>
+        <div class="dl add"><span class="g">10</span><span class="plus">+</span><span class="t">}</span></div>
       </div>
     </div>
 
-    <!-- projects/agentic-ai.py -->
-    <div class="diff-file">
-      <div class="diff-file-header" onclick="toggleDiff(this)">
-        ▾ &nbsp; <span style="color:var(--green-text);">projects/agentic-ai.py</span>
-        <span class="diff-badge">+42 −0</span>
-      </div>
-      <div class="diff-body">
-        <div class="diff-line diff-line-hunk">
-          <div class="diff-line-num">@@</div>
-          <div class="diff-line-content">@@ -0,0 +1,42 @@ # Agentic AI Supply Chain Intelligence Platform</div>
+    <!-- PROJECT FILES -->
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">projects/agentic-supply-chain.py</span><span class="f-stat"><span class="add">+1</span></span></div>
+      <div class="pbody">
+        <p class="ov"><b>Agentic AI Supply Chain Intelligence Platform.</b> End-to-end agentic app combining LLMs, RAG, and autonomous reasoning to support demand-planning and supply-chain decisions. Multi-step reasoning + tool use over large unstructured operational data, with MLOps for versioning, deployment, and monitoring.</p>
+        <div class="ptags"><span class="ptag">LangChain</span><span class="ptag">PyTorch</span><span class="ptag">OpenAI APIs</span><span class="ptag">FAISS</span><span class="ptag">PostgreSQL</span><span class="ptag">Power BI</span></div>
+        <div class="pmetrics">
+          <div class="pm"><div class="n purple">RAG</div><div class="l">+ autonomous agents</div></div>
+          <div class="pm"><div class="n green">↑</div><div class="l">retrieval accuracy</div></div>
+          <div class="pm"><div class="n blue">prod</div><div class="l">versioned + monitored</div></div>
         </div>
-        <div class="diff-line"><div class="diff-line-num">1</div><div class="diff-line-content">+ """</div></div>
-        <div class="diff-line"><div class="diff-line-num">2</div><div class="diff-line-content">+ Agentic AI Supply Chain Intelligence Platform</div></div>
-        <div class="diff-line"><div class="diff-line-num">3</div><div class="diff-line-content">+ Stack: LangChain · PyTorch · OpenAI APIs · FAISS · Python</div></div>
-        <div class="diff-line"><div class="diff-line-num">4</div><div class="diff-line-content">+ """</div></div>
-        <div class="diff-line"><div class="diff-line-num">5</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">6</div><div class="diff-line-content">+ from langchain.agents import AgentExecutor, create_openai_tools_agent</div></div>
-        <div class="diff-line"><div class="diff-line-num">7</div><div class="diff-line-content">+ from langchain_community.vectorstores import FAISS</div></div>
-        <div class="diff-line"><div class="diff-line-num">8</div><div class="diff-line-content">+ from langchain.text_splitter import RecursiveCharacterTextSplitter</div></div>
-        <div class="diff-line"><div class="diff-line-num">9</div><div class="diff-line-content">+ import torch</div></div>
-        <div class="diff-line"><div class="diff-line-num">10</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">11</div><div class="diff-line-content">+ # RAG Pipeline: chunk → embed → index → retrieve → generate</div></div>
-        <div class="diff-line"><div class="diff-line-num">12</div><div class="diff-line-content">+ splitter = RecursiveCharacterTextSplitter(</div></div>
-        <div class="diff-line"><div class="diff-line-num">13</div><div class="diff-line-content">+     chunk_size=512,      # optimized after eval on MRR@5</div></div>
-        <div class="diff-line"><div class="diff-line-num">14</div><div class="diff-line-content">+     chunk_overlap=50,    # context preservation</div></div>
-        <div class="diff-line"><div class="diff-line-num">15</div><div class="diff-line-content">+ )</div></div>
-        <div class="diff-line"><div class="diff-line-num">16</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">17</div><div class="diff-line-content">+ # Outcome: MRR@5 = 0.87 after embedding model tuning</div></div>
-        <div class="diff-line"><div class="diff-line-num">18</div><div class="diff-line-content">+ # Supports: supply chain ops · demand planning · autonomous retrieval</div></div>
       </div>
     </div>
 
-    <!-- projects/demand-forecasting.py -->
-    <div class="diff-file">
-      <div class="diff-file-header" onclick="toggleDiff(this)">
-        ▾ &nbsp; <span style="color:var(--green-text);">projects/demand-forecasting.py</span>
-        <span class="diff-badge">+38 −0</span>
-      </div>
-      <div class="diff-body">
-        <div class="diff-line diff-line-hunk">
-          <div class="diff-line-num">@@</div>
-          <div class="diff-line-content">@@ -0,0 +1,38 @@ # Demand Forecasting & Supply Chain Analytics</div>
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">projects/demand-forecasting.py</span><span class="f-stat"><span class="add">+1</span></span></div>
+      <div class="pbody">
+        <p class="ov"><b>Demand Forecasting &amp; Supply Chain Analytics.</b> Production-ready forecasting for material and inventory planning. Random Forest, ARIMA, and deep-learning models over historical supply-chain data, with engineered features for seasonality and anomalies, deployed with monitoring and Power BI tracking of forecast vs. actual.</p>
+        <div class="ptags"><span class="ptag">scikit-learn</span><span class="ptag">statsmodels</span><span class="ptag">Prophet</span><span class="ptag">PyTorch</span><span class="ptag">Power BI</span><span class="ptag">SQL</span></div>
+        <div class="pmetrics">
+          <div class="pm"><div class="n green"><span class="count" data-to="0.85" data-dec="2">0</span>+</div><div class="l">R² accuracy</div></div>
+          <div class="pm"><div class="n blue">3</div><div class="l">model families</div></div>
+          <div class="pm"><div class="n purple">live</div><div class="l">ops dashboards</div></div>
         </div>
-        <div class="diff-line"><div class="diff-line-num">1</div><div class="diff-line-content">+ """</div></div>
-        <div class="diff-line"><div class="diff-line-num">2</div><div class="diff-line-content">+ Demand Forecasting & Supply Chain Analytics Model</div></div>
-        <div class="diff-line"><div class="diff-line-num">3</div><div class="diff-line-content">+ Stack: Python · scikit-learn · statsmodels · Prophet · PyTorch · Power BI</div></div>
-        <div class="diff-line"><div class="diff-line-num">4</div><div class="diff-line-content">+ Outcome: R² > 0.85</div></div>
-        <div class="diff-line"><div class="diff-line-num">5</div><div class="diff-line-content">+ """</div></div>
-        <div class="diff-line"><div class="diff-line-num">6</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">7</div><div class="diff-line-content">+ from sklearn.ensemble import RandomForestRegressor</div></div>
-        <div class="diff-line"><div class="diff-line-num">8</div><div class="diff-line-content">+ from statsmodels.tsa.arima.model import ARIMA</div></div>
-        <div class="diff-line"><div class="diff-line-num">9</div><div class="diff-line-content">+ from prophet import Prophet</div></div>
-        <div class="diff-line"><div class="diff-line-num">10</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">11</div><div class="diff-line-content">+ models = {</div></div>
-        <div class="diff-line"><div class="diff-line-num">12</div><div class="diff-line-content">+     "random_forest": RandomForestRegressor(n_estimators=200),</div></div>
-        <div class="diff-line"><div class="diff-line-num">13</div><div class="diff-line-content">+     "arima": ARIMA(order=(2, 1, 2)),</div></div>
-        <div class="diff-line"><div class="diff-line-num">14</div><div class="diff-line-content">+     "prophet": Prophet(seasonality_mode="multiplicative"),</div></div>
-        <div class="diff-line"><div class="diff-line-num">15</div><div class="diff-line-content">+ }</div></div>
-        <div class="diff-line"><div class="diff-line-num">16</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">17</div><div class="diff-line-content">+ results = {"r_squared": 0.87, "mae": "within 5% of actuals"}</div></div>
-        <div class="diff-line"><div class="diff-line-num">18</div><div class="diff-line-content">+ # Supports: material forecast · inventory planning · ops leadership</div></div>
       </div>
     </div>
 
-    <!-- projects/customer-insights.py -->
-    <div class="diff-file">
-      <div class="diff-file-header" onclick="toggleDiff(this)">
-        ▾ &nbsp; <span style="color:var(--green-text);">projects/customer-insights.py</span>
-        <span class="diff-badge">+44 −0</span>
-      </div>
-      <div class="diff-body">
-        <div class="diff-line diff-line-hunk">
-          <div class="diff-line-num">@@</div>
-          <div class="diff-line-content">@@ -0,0 +1,44 @@ # Customer Insights & KPI Automation</div>
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">projects/document-intelligence.py</span><span class="f-stat"><span class="add">+1</span></span></div>
+      <div class="pbody">
+        <p class="ov"><b>Enterprise Document Intelligence (RAG Knowledge Assistant).</b> Intelligent querying across large unstructured document collections. Built ingestion, chunking, vector indexing, and contextual retrieval with FAISS + OpenAI embeddings, plus evaluation pipelines to measure and iteratively improve retrieval accuracy.</p>
+        <div class="ptags"><span class="ptag">LangChain</span><span class="ptag">FAISS</span><span class="ptag">OpenAI Embeddings</span><span class="ptag">Python</span><span class="ptag">PostgreSQL</span></div>
+        <div class="pmetrics">
+          <div class="pm"><div class="n green">↓</div><div class="l">lookup time</div></div>
+          <div class="pm"><div class="n blue">eval</div><div class="l">-driven iteration</div></div>
+          <div class="pm"><div class="n purple">scales</div><div class="l">large doc sets</div></div>
         </div>
-        <div class="diff-line"><div class="diff-line-num">1</div><div class="diff-line-content">+ """</div></div>
-        <div class="diff-line"><div class="diff-line-num">2</div><div class="diff-line-content">+ Customer Insights & KPI Automation</div></div>
-        <div class="diff-line"><div class="diff-line-num">3</div><div class="diff-line-content">+ Stack: Python · SQL · Power BI · scikit-learn · K-Means</div></div>
-        <div class="diff-line"><div class="diff-line-num">4</div><div class="diff-line-content">+ """</div></div>
-        <div class="diff-line"><div class="diff-line-num">5</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">6</div><div class="diff-line-content">+ records_analyzed = 8_000          # customer transactions</div></div>
-        <div class="diff-line"><div class="diff-line-num">7</div><div class="diff-line-content">+ targeting_improvement = 0.20      # +20% campaign effectiveness</div></div>
-        <div class="diff-line"><div class="diff-line-num">8</div><div class="diff-line-content">+ retention_improvement = 0.18      # +18% engagement via segmentation</div></div>
-        <div class="diff-line"><div class="diff-line-num">9</div><div class="diff-line-content">+ manual_effort_reduction = 0.40    # −40% through Python automation</div></div>
-        <div class="diff-line"><div class="diff-line-num">10</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">11</div><div class="diff-line-content">+ # RFM segmentation: high-value · at-risk · low-engagement</div></div>
-        <div class="diff-line"><div class="diff-line-num">12</div><div class="diff-line-content">+ segments = ["high_value", "at_risk", "low_engagement"]</div></div>
-        <div class="diff-line"><div class="diff-line-num">13</div><div class="diff-line-content">+ # Change data-to="18" below if you prefer 15 for the counter</div></div>
-        <div class="diff-line"><div class="diff-line-num">14</div><div class="diff-line-content">+ metrics = {"CLV": True, "frequency": True, "recency": True}</div></div>
+      </div>
+    </div>
+
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">projects/customer-insights.py</span><span class="f-stat"><span class="add">+1</span></span></div>
+      <div class="pbody">
+        <p class="ov"><b>Customer Insights &amp; KPI Automation.</b> End-to-end customer analytics over 8,000+ transactions. RFM analysis and K-Means segmentation (high-value / at-risk / low-engagement), engineered CLV and frequency metrics, and Power BI dashboards with automated reporting workflows.</p>
+        <div class="ptags"><span class="ptag">Python</span><span class="ptag">SQL</span><span class="ptag">Power BI</span><span class="ptag">scikit-learn</span><span class="ptag">K-Means</span></div>
+        <div class="pmetrics">
+          <div class="pm"><div class="n green">+<span class="count" data-to="20">0</span>%</div><div class="l">campaign targeting</div></div>
+          <div class="pm"><div class="n green">+<span class="count" data-to="18">0</span>%</div><div class="l">engagement</div></div>
+          <div class="pm"><div class="n blue">−<span class="count" data-to="40">0</span>%</div><div class="l">manual effort</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">projects/financial-reconciliation.py</span><span class="f-stat"><span class="add">+1</span></span></div>
+      <div class="pbody">
+        <p class="ov"><b>Financial Data Reconciliation &amp; Reporting Automation.</b> Automated reconciliation validating financial data across 5,000+ records and multiple sources. Excel + Python workflow with advanced formulas, exception reporting, validation controls, and Power BI dashboards summarizing results and key financial metrics.</p>
+        <div class="ptags"><span class="ptag">Python</span><span class="ptag">SQL</span><span class="ptag">Excel</span><span class="ptag">Power BI</span><span class="ptag">Pandas</span></div>
+        <div class="pmetrics">
+          <div class="pm"><div class="n blue"><span class="count" data-to="5000">0</span>+</div><div class="l">records validated</div></div>
+          <div class="pm"><div class="n green">↓</div><div class="l">review time</div></div>
+          <div class="pm"><div class="n purple">0</div><div class="l">unresolved variances</div></div>
+        </div>
       </div>
     </div>
 
     <!-- education.md -->
-    <div class="diff-file">
-      <div class="diff-file-header" onclick="toggleDiff(this)">
-        ▾ &nbsp; <span style="color:var(--green-text);">education.md</span>
-        <span class="diff-badge">+18 −0</span>
-      </div>
-      <div class="diff-body">
-        <div class="diff-line diff-line-hunk">
-          <div class="diff-line-num">@@</div>
-          <div class="diff-line-content">@@ -0,0 +1,18 @@ # Education</div>
-        </div>
-        <div class="diff-line"><div class="diff-line-num">1</div><div class="diff-line-content">+ # Education</div></div>
-        <div class="diff-line"><div class="diff-line-num">2</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">3</div><div class="diff-line-content">+ ## Illinois Institute of Technology · Chicago, IL</div></div>
-        <div class="diff-line"><div class="diff-line-num">4</div><div class="diff-line-content">+ Master of Applied Science in Data Science</div></div>
-        <div class="diff-line"><div class="diff-line-num">5</div><div class="diff-line-content">+ Graduated: December 2025 · GPA: 3.45/4.00</div></div>
-        <div class="diff-line"><div class="diff-line-num">6</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">7</div><div class="diff-line-content">+ Coursework: ML · Deep Learning · NLP · Data Engineering</div></div>
-        <div class="diff-line"><div class="diff-line-num">8</div><div class="diff-line-content">+            BI · Big Data Analytics · Generative AI</div></div>
-        <div class="diff-line"><div class="diff-line-num">9</div><div class="diff-line-content">+ </div></div>
-        <div class="diff-line"><div class="diff-line-num">10</div><div class="diff-line-content">+ ## JNTU · India</div></div>
-        <div class="diff-line"><div class="diff-line-num">11</div><div class="diff-line-content">+ B.Tech Computer Science & Engineering</div></div>
-        <div class="diff-line"><div class="diff-line-num">12</div><div class="diff-line-content">+ Graduated: June 2022 · GPA: 3.68/4.00</div></div>
+    <div class="file">
+      <div class="f-head"><span class="chev">▾</span><span class="f-name">education.md</span><span class="f-stat"><span class="add">+9</span></span></div>
+      <div class="diff">
+        <div class="dl add"><span class="g">1</span><span class="plus">+</span><span class="t">## Education</span></div>
+        <div class="dl add"><span class="g">2</span><span class="plus">+</span><span class="t">- M.S. Applied Science, Data Science — Illinois Institute of Technology</span></div>
+        <div class="dl add"><span class="g">3</span><span class="plus">+</span><span class="t">  Chicago, IL · Dec 2025 · GPA 3.45</span></div>
+        <div class="dl add"><span class="g">4</span><span class="plus">+</span><span class="t">- B.Tech, Computer Science &amp; Engineering — JNTU, India · 2022 · GPA 3.68</span></div>
+        <div class="dl add"><span class="g">5</span><span class="plus">+</span><span class="t"></span></div>
+        <div class="dl add"><span class="g">6</span><span class="plus">+</span><span class="t">## Certifications</span></div>
+        <div class="dl add"><span class="g">7</span><span class="plus">+</span><span class="t">- Power BI Data Analyst · Advanced SQL for Data Analysis</span></div>
+        <div class="dl add"><span class="g">8</span><span class="plus">+</span><span class="t">- Python for Data Science &amp; ML</span></div>
+        <div class="dl add"><span class="g">9</span><span class="plus">+</span><span class="t">- Microsoft Azure Fundamentals · AWS Cloud Practitioner</span></div>
       </div>
     </div>
 
-  </div><!-- end files tab -->
+  </section>
 
-</div><!-- end container -->
+  <!-- ============ COMMITS ============ -->
+  <section class="panel" id="commits">
+    <div class="commit reveal"><span class="dot"></span><div><div class="msg">feat: graduate M.S. Applied Science, Data Science @ IIT Chicago</div><div class="sub">GPA 3.45 · ML, Deep Learning, NLP, Data Engineering, GenAI</div></div><span class="hash">a1f9c2e · Dec 2025</span></div>
+    <div class="commit reveal"><span class="dot"></span><div><div class="msg">feat: data science practicum @ Pure Platform (IIT partnership)</div><div class="sub">8k+ transactions · RFM + K-Means · Power BI · +20% targeting, −40% manual effort</div></div><span class="hash">7b3e019 · May 2025</span></div>
+    <div class="commit reveal"><span class="dot"></span><div><div class="msg">feat: project engineer @ Wipro × Nokia Networks</div><div class="sub">Operational data analysis, root-cause audits, Python automation · Bengaluru</div></div><span class="hash">c84d5fa · Jan 2023</span></div>
+    <div class="commit reveal"><span class="dot"></span><div><div class="msg">feat: project engineer intern @ Wipro (5G telecom)</div><div class="sub">Performance data analysis, troubleshooting, Agile/Scrum · Bengaluru</div></div><span class="hash">2e6b9d4 · May 2022</span></div>
+    <div class="commit reveal"><span class="dot"></span><div><div class="msg">init: B.Tech, Computer Science &amp; Engineering @ JNTU</div><div class="sub">GPA 3.68 · foundation in CS, algorithms, systems</div></div><span class="hash">0a1c7f3 · Jun 2022</span></div>
+  </section>
 
-<!-- CONFETTI CONTAINER -->
-<div class="confetti-container" id="confetti-container"></div>
+</main>
+
+<footer class="wrap">
+  <span>© 2025 Gowthami Kamatam · built as a pull request, from scratch</span>
+  <span>main ← candidate/gowthami-kamatam</span>
+</footer>
 
 <script>
-  // TAB SWITCHING
-  function switchTab(name) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    event.currentTarget.classList.add('active');
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // intro cover
+  const cover=document.getElementById("cover");
+  document.body.style.overflow="hidden";
+  function enter(){
+    if(cover.classList.contains("gone"))return;
+    cover.classList.add("gone");
+    document.body.style.overflow="";
+    setTimeout(()=>{cover.style.display="none";},reduce?0:650);
+    window.scrollTo(0,0);
   }
+  document.getElementById("enterBtn").addEventListener("click",enter);
+  addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&document.body.style.overflow==="hidden"){e.preventDefault();enter();}});
 
-  // DIFF TOGGLE
-  function toggleDiff(header) {
-    const body = header.nextElementSibling;
-    const isCollapsed = body.classList.contains('collapsed');
-    body.classList.toggle('collapsed');
-    header.firstChild.textContent = isCollapsed ? '▾ ' : '▸ ';
+  // progress
+  const prog=document.getElementById("prog");
+  const onScroll=()=>{const h=document.documentElement;prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%"};
+  addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+  // tabs
+  const tabs=[...document.querySelectorAll(".tab")];
+  const panels={conv:document.getElementById("conv"),files:document.getElementById("files"),commits:document.getElementById("commits")};
+  tabs.forEach(t=>t.addEventListener("click",()=>{
+    tabs.forEach(x=>x.classList.remove("active"));t.classList.add("active");
+    Object.values(panels).forEach(p=>p.classList.remove("show"));
+    panels[t.dataset.tab].classList.add("show");
+    runReveals();runCounts();
+  }));
+
+  // collapse files
+  document.querySelectorAll(".f-head").forEach(h=>h.addEventListener("click",()=>h.parentElement.classList.toggle("collapsed")));
+
+  // reveals
+  const io=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");o.unobserve(e.target);}}),{threshold:.1});
+  function runReveals(){document.querySelectorAll(".panel.show .reveal:not(.in), .pr-head.reveal:not(.in)").forEach(el=>reduce?el.classList.add("in"):io.observe(el));}
+  runReveals();
+
+  // count-up
+  function countUp(el){
+    if(el.dataset.done)return;el.dataset.done=1;
+    const to=parseFloat(el.dataset.to),dec=parseInt(el.dataset.dec||"0",10);
+    if(reduce){el.textContent=to.toLocaleString("en-US",{minimumFractionDigits:dec,maximumFractionDigits:dec});return;}
+    const dur=1000,t0=performance.now();
+    (function f(t){const p=Math.min((t-t0)/dur,1),e=1-Math.pow(1-p,3);
+      el.textContent=(to*e).toLocaleString("en-US",{minimumFractionDigits:dec,maximumFractionDigits:dec});
+      if(p<1)requestAnimationFrame(f);})(t0);
   }
+  const cio=new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){countUp(e.target);o.unobserve(e.target);}}),{threshold:.6});
+  function runCounts(){document.querySelectorAll(".panel.show .count").forEach(el=>cio.observe(el));}
+  runCounts();
 
-  // MERGE ACTION
-  function doMerge() {
-    const btn = document.getElementById('merge-btn');
-    btn.disabled = true;
-    btn.innerHTML = '🔀 Merging...';
-    btn.style.background = '#6e7681';
-
-    setTimeout(() => {
-      // Flip PR status
-      const badge = document.getElementById('pr-status-badge');
-      badge.textContent = '✓ Merged';
-      badge.classList.remove('open');
-
-      // Show post-merge
-      document.getElementById('pre-merge').style.display = 'none';
-      document.getElementById('post-merge').style.display = 'block';
-      document.getElementById('merge-section').classList.add('merged');
-
-      // Confetti
-      fireConfetti();
-    }, 1200);
+  // CI checks sequential pass
+  let checksRun=false;
+  const checksEl=document.getElementById("checks");
+  const ckCount=document.getElementById("ckcount");
+  function runChecks(){
+    if(checksRun)return;checksRun=true;
+    const items=[...checksEl.querySelectorAll(".check")];
+    if(reduce){items.forEach(c=>{c.classList.add("passed");c.querySelector(".ck-status").textContent="passed";});ckCount.textContent=items.length;return;}
+    items.forEach((c,i)=>setTimeout(()=>{
+      c.classList.add("passed");c.querySelector(".ck-status").textContent="passed";
+      ckCount.textContent=i+1;
+    },350+i*420));
   }
+  new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){runChecks();o.disconnect();}}),{threshold:.4}).observe(checksEl);
 
-  // CONFETTI
-  function fireConfetti() {
-    const container = document.getElementById('confetti-container');
-    const colors = ['#3fb950', '#8957e5', '#388bfd', '#e3b341', '#f85149', '#79c0ff'];
-
-    for (let i = 0; i < 80; i++) {
-      const piece = document.createElement('div');
-      piece.className = 'confetti-piece';
-      piece.style.left = Math.random() * 100 + 'vw';
-      piece.style.top = '-10px';
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.animationDelay = Math.random() * 1.5 + 's';
-      piece.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
-      piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-      container.appendChild(piece);
-    }
-
-    setTimeout(() => { container.innerHTML = ''; }, 4000);
-  }
-
-  // COUNTER ANIMATION
-  function animateCounter(el) {
-    const target = parseInt(el.getAttribute('data-to'));
-    const duration = 1500;
-    const start = performance.now();
-
-    function update(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target).toLocaleString();
-      if (progress < 1) requestAnimationFrame(update);
-      else el.textContent = target.toLocaleString();
-    }
-
-    requestAnimationFrame(update);
-  }
-
-  // INTERSECTION OBSERVER FOR COUNTERS
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !entry.target.dataset.animated) {
-        entry.target.dataset.animated = 'true';
-        animateCounter(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  document.querySelectorAll('.counter').forEach(el => observer.observe(el));
-
-  // ANIMATE CI CHECKS ON LOAD
-  window.addEventListener('load', () => {
-    // Progress bar
-    setTimeout(() => {
-      const bar = document.getElementById('milestone-bar');
-      if (bar) bar.style.width = '100%';
-    }, 500);
+  // merge interaction
+  const mergeBtn=document.getElementById("mergeBtn");
+  mergeBtn.addEventListener("click",()=>{
+    document.getElementById("state").classList.add("merged");
+    document.getElementById("state").innerHTML='<span class="ic"></span>Merged';
+    const mb=document.getElementById("mergebox");mb.classList.add("merged");
+    document.getElementById("mb-title").textContent="Pull request successfully merged and closed";
+    document.getElementById("mb-sub").textContent="Welcome to the team, Gowthami. Here's how to reach her:";
+    document.getElementById("contact").classList.add("show");
+    mergeBtn.textContent="Merged ✓";mergeBtn.disabled=true;mergeBtn.style.background="var(--purple-btn)";mergeBtn.style.cursor="default";
+    if(!reduce)confetti();
+    document.getElementById("contact").scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});
   });
-</script>
 
-</body>
-</html>
+  // light confetti (respects reduced motion via guard above)
+  function confetti(){
+    const colors=["#3FB950","#A371F7","#58A6FF","#D29922","#F85149"];
+    for(let i=0;i<70;i++){
+      const d=document.createElement("div");
+      d.style.cssText=`position:fixed;top:40%;left:50%;width:8px;height:8px;z-index:300;border-radius:2px;pointer-events:none;background:${colors[i%colors.length]}`;
+      document.body.appendChild(d);
+      const ang=Math.random()*Math.PI*2,vel=4+Math.random()*7;
+      let x=0,y=0,vx=Math.cos(ang)*vel,vy=Math.sin(ang)*vel-6,rot=Math.random()*360;
+      const t0=performance.now();
+      (function fly(t){const dt=(t-t0)/16;vy+=0.32;x+=vx;y+=vy;rot+=8;
+        d.style.transform=`translate(${x}px,${y}px) rotate(${rot}deg)`;
+        d.style.opacity=String(Math.max(0,1-dt/90));
+        if(dt<90)requestAnimationFrame(fly);else d.remove();})(t0);
+    }
+  }
+</script>
